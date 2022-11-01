@@ -1,8 +1,6 @@
 # 🚀 Getting started with Strapi
 
-Wrapper for KafkaJS library to be used with Strapi apps. You are going to need a live [Kafka](https://kafka.apache.org/) instance/cluster to be running. The Strapi app will be able to act as publisher and/or subscriber.
-<br/>
-As added bonus, you can setup multiple publishers as well as subscribers within the same Strapi app; e.g., one for logging, one for notifications, one for... You name it.
+Wrapper for Firebase Admin Node.js SDK library to be used with Strapi apps. You are going to need a Google Firebase service account credential file (https://firebase.google.com/). The Strapi app will be able to send push notification to clients reporting their FCM token.
 <br/><br/>
 
 ### `Installation`

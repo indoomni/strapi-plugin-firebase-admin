@@ -1,12 +1,12 @@
 {
-  "name": "@indoomni/strapi-plugin-kafkajs",
-  "version": "1.1.9",
-  "description": "Wrapper for KafkaJS library to be used with Strapi apps.",
+  "name": "@indoomni/strapi-plugin-firebase-admin",
+  "version": "1.0.0",
+  "description": "Wrapper for Firebase Admin Node.js SDK library to be used with Strapi apps.",
   "strapi": {
     "name": "kafkajs",
-    "description": "Wrapper for KafkaJS library to be used with Strapi apps. You are going to need a live Kafka instance/cluster to be running. The Strapi app will be able to act as publisher and/or subscriber. As an added bonus, you can setup multiple publishers as well as subscribers within the same Strapi app.",
+    "description": "Wrapper for Firebase Admin Node.js SDK library to be used with Strapi apps. Supply a valid Google Firebase credentials (JSON) file. As of time of writing, implemented functionality is push notification.",
     "kind": "plugin",
-    "displayName": "Strapi KafkaJS library wrapper"
+    "displayName": "Strapi Firebase Admin Node.js SDK library wrapper"
   },
   "dependencies": {},
   "peerDependencies": {
@@ -27,7 +27,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/indoomni/strapi-plugin-kafkajs.git"
+    "url": "git+https://github.com/indoomni/strapi-plugin-firebase-admin.git"
   },
   "keywords": [
     "strapi",
@@ -42,7 +42,7 @@
     "consumer"
   ],
   "bugs": {
-    "url": "https://github.com/indoomni/strapi-plugin-kafkajs/issues"
+    "url": "https://github.com/indoomni/strapi-plugin-firebase-admin/issues"
   },
-  "homepage": "https://github.com/indoomni/strapi-plugin-kafkajs#readme"
+  "homepage": "https://github.com/indoomni/strapi-plugin-firebase-admin#readme"
 }
