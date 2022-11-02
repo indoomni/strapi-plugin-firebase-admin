@@ -3,7 +3,7 @@
 module.exports = ({ strapi }) => ({
   index(ctx) {
     ctx.body = strapi
-      .plugin('kafkajs')
+      .plugin('firebase-admin')
       .service('test')
       .doSomething('Welcome to Strapi 🚀');
   },

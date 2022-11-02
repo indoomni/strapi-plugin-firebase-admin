@@ -2,87 +2,46 @@
 
 const util = require('util');
 
-console.log('Kafka config..');
+// console.log('Firebase admin config..');
+// console.log(
+//   'Config ->',
+//   strapi.config.server['firebase-admin'],
+// );
 
 module.exports = {
   default: ({ env }) => {
     if (
-      !strapi.config.server.kafkajs ||
-      !strapi.config.server.kafkajs.enabled
+      !strapi.config.server['firebase-admin'] ||
+      !strapi.config.server['firebase-admin'].enabled
     ) {
       return undefined;
     }
-    return strapi.config.server.kafkajs.config;
+    return strapi.config.server['firebase-admin'].config;
   },
   validator: config => {
-    strapi.kafka = {
-      publishers: [],
-      subscribers: [],
+    strapi.firebase = {
+      admin: undefined,
     };
 
-    // Publishers..
     try {
-      const { publishers } = config;
-      console.log('Publisher:', publishers);
-      if (!publishers || publishers.length <= 0)
-        throw new Error();
-      publishers.forEach(publisher => {
-        if (publisher.enabled) {
-          if (
-            typeof publisher.clientId !== 'string' &&
-            typeof publisher.topic !== 'string' &&
-            !publisher.brokers
-          ) {
-            throw new Error(
-              `Kafka publisher ${util.inspect(
-                publisher,
-              )} configuration is invalid!`,
-            );
-          }
-          strapi.kafka.publishers.push(publisher);
-          console.log(
-            `Kafka publisher ${util.inspect(
-              publisher.clientId,
-            )} configuration is valid!`,
-          );
-        }
-      });
-    } catch (err) {
-      strapi.log.error(
-        `Kafka publisher got disabled or configuration is invalid!`,
+      const { serviceId, configFile } = config;
+      // console.log('Current directory:', __dirname);
+      const dirname = strapi.dirs.dist.src;
+      const configFilename = `${dirname}/${configFile}`;
+      config.serviceAccount = require(configFilename);
+      // console.log(
+      //   'Service account:',
+      //   config.serviceAccount,
+      // );
+      strapi.firebase.admin = config;
+      console.log(
+        `Firebase admin ${util.inspect(
+          serviceId,
+        )} configuration is valid!`,
       );
-    }
-
-    // Subscribers..
-    try {
-      const { subscribers } = config;
-      console.log('Subscribers:', subscribers);
-      if (!subscribers || subscribers.length <= 0)
-        throw new Error();
-      subscribers.forEach(subscriber => {
-        if (subscriber.enabled) {
-          if (
-            typeof subscriber.clientId !== 'string' &&
-            typeof subscriber.topic !== 'string' &&
-            !subscriber.brokers
-          ) {
-            throw new Error(
-              `Kafka subscriber ${util.inspect(
-                subscriber,
-              )} configuration is invalid!`,
-            );
-          }
-          strapi.kafka.subscribers.push(subscriber);
-          console.log(
-            `Kafka subscriber ${util.inspect(
-              subscriber.clientId,
-            )} configuration is valid!`,
-          );
-        }
-      });
     } catch (err) {
       strapi.log.error(
-        `Kafka subscriber got disabled or configuration is invalid!`,
+        `Firebase admin got disabled or configuration is invalid!`,
       );
     }
   },

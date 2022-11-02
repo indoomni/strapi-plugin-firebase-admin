@@ -1,13 +1,11 @@
 'use strict';
 
 const test = require('./test');
-const publisher = require('./publisher');
-const subscriber = require('./subscriber');
+const admin = require('./admin');
 
-console.log('Kafka controllers..');
+// console.log('Firebase admin controllers..');
 
 module.exports = {
   test,
-  publisher,
-  subscriber,
+  admin,
 };

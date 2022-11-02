@@ -2,7 +2,7 @@
 
 const test = require('./test');
 
-// console.log('Kafka services..');
+// console.log('Firebase admin services..');
 
 module.exports = {
   test,

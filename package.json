@@ -32,14 +32,10 @@
   "keywords": [
     "strapi",
     "plugin",
-    "kafka",
-    "kafkajs",
-    "publisher",
-    "subscriber",
-    "pub",
-    "sub",
-    "producer",
-    "consumer"
+    "firebase",
+    "firebase-admin",
+    "fcm",
+    "gcm"
   ],
   "bugs": {
     "url": "https://github.com/indoomni/strapi-plugin-firebase-admin/issues"
