@@ -43,11 +43,11 @@ module.exports = ({ env }) => ({
     enabled: true,
     config: {
       configFile: '../service-account.json',
-      serviceId: `${env('APP_NAME')}_${env('ENV')}_fcm`,
+      clientId: `${env('APP_NAME')}_${env('ENV')}_fcm`,
       services: ['notification'],
       tags: [],
       test: {
-        fcmToken: 'xyz123',
+        token: 'xyz123',
         title: 'Hello!',
         body: 'Hello world!',
       },

@@ -2,7 +2,7 @@
 
 const util = require('util');
 
-// console.log('Firebase admin register..');
+// console.log('Firebase register..');
 
 module.exports = ({ strapi }) => {
   if (!strapi.inspect)

@@ -1,5 +1,5 @@
 'use strict';
 
-// console.log('Firebase admin destroy..');
+// console.log('Firebase destroy..');
 
 module.exports = async ({ strapi }) => {};

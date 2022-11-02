@@ -1,6 +1,6 @@
 {
   "name": "@indoomni/strapi-plugin-firebase-admin",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Wrapper for Firebase Admin Node.js SDK library to be used with Strapi apps.",
   "strapi": {
     "name": "firebase-admin",
@@ -8,7 +8,12 @@
     "kind": "plugin",
     "displayName": "Strapi Firebase Admin Node.js SDK library wrapper"
   },
-  "dependencies": {},
+  "dependencies": {
+    "firebase": "^9.13.0",
+    "firebase-admin": "^11.2.0",
+    "util": "^0.12.5",
+    "uuid": "^9.0.0"
+  },
   "peerDependencies": {
     "@strapi/strapi": "^4.0.0"
   },

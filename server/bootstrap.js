@@ -1,44 +1,27 @@
 'use strict';
 
-// console.log('Firebase admin bootstrap..');
+// console.log('Firebase bootstrap..');
 
 module.exports = async ({ strapi }) => {
-  const { admin } = strapi.firebase;
   try {
-    // strapi.log.info('Loading Firebase admin..');
+    const { config, admin } = strapi.firebase;
+
     if (
-      await strapi
+      strapi
         .plugin('firebase-admin')
         .controller('admin')
-        .init(admin)
+        .init(config)
     ) {
-      strapi.log.debug(
-        `Firebase admin handler initialized: ${strapi.inspect(
-          admin.serviceId,
-        )}`,
-      );
-
-      if (admin.test) {
-        // Send test message in background..
-        setTimeout(async () => {
-          console.log('Sending test message..');
-          let { fcmToken, title, body } = admin.test;
-          title = `Hello!`;
-          body = `Hello, ${admin.configId} just got alive!`;
-          strapi
-            .plugin('firebase-admin')
-            .controller('admin')
-            .send(fcmToken, title, body, {});
-        }, 2000);
-      }
+      // Do anything..?
     }
-    // strapi.log.info('Firebase admin loaded!');
+
+    strapi.log.info(
+      `Bootstrapped Firebase admin: ${strapi.inspect(
+        config.clientId,
+      )}`,
+    );
   } catch (err) {
     strapi.log.error(err);
+    strapi.log.info('Firebase admin not bootstrapped!');
   }
-  strapi.log.info(
-    `Bootstrapped Firebase admin: ${strapi.inspect(
-      admin.serviceId,
-    )}`,
-  );
 };

@@ -2,7 +2,7 @@
 
 const util = require('util');
 
-// console.log('Firebase admin config..');
+// console.log('Firebase config..');
 // console.log(
 //   'Config ->',
 //   strapi.config.server['firebase-admin'],
@@ -19,26 +19,23 @@ module.exports = {
     return strapi.config.server['firebase-admin'].config;
   },
   validator: config => {
-    strapi.firebase = {
-      admin: undefined,
-    };
-
     try {
-      const { serviceId, configFile } = config;
-      // console.log('Current directory:', __dirname);
+      const { clientId, configFile } = config;
       const dirname = strapi.dirs.dist.src;
       const configFilename = `${dirname}/${configFile}`;
-      config.serviceAccount = require(configFilename);
-      // console.log(
-      //   'Service account:',
-      //   config.serviceAccount,
-      // );
-      strapi.firebase.admin = config;
+      require(configFilename);
+
       console.log(
         `Firebase admin ${util.inspect(
-          serviceId,
+          clientId,
         )} configuration is valid!`,
       );
+
+      // Everything's okay!
+      strapi.firebase = {
+        config,
+        admin: undefined,
+      };
     } catch (err) {
       strapi.log.warn(
         `Firebase admin got disabled or configuration is invalid!`,

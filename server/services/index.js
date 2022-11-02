@@ -2,7 +2,7 @@
 
 const test = require('./test');
 
-// console.log('Firebase admin services..');
+// console.log('Firebase services..');
 
 module.exports = {
   test,
