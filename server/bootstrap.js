@@ -22,7 +22,7 @@ module.exports = async ({ strapi }) => {
         // Send test message in background..
         setTimeout(async () => {
           console.log('Sending test message..');
-          const { fcmToken, title, body } = admin.test;
+          let { fcmToken, title, body } = admin.test;
           title = `Hello!`;
           body = `Hello, ${admin.configId} just got alive!`;
           strapi
