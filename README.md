@@ -1,15 +1,19 @@
 # 🚀 Getting started with Strapi
 
-Wrapper for Firebase Admin Node.js SDK library to be used with Strapi apps. You are going to need a Google Firebase service account credential file (https://firebase.google.com/). The Strapi app will be able to send push notification to clients reporting their FCM token.
+Wrapper for google-wombot's [Firebase Admin Node.js SDK](https://www.npmjs.com/package/firebase-admin) library to be used with Strapi apps. You are going to need a Google Firebase service account credential file (for more information, head on to https://firebase.google.com/). The Strapi app will be able to send push notification to clients reporting their FCM token, do analytics and stuff.
+<br/>
+Note: As of the time of writing this document, only the push notification has been implemented.
+<br/>
+Save the FCM token of each client on login, register, or some other onboarding scheme you may have setup.
 <br/><br/>
 
 ### `Installation`
 
-Add the library to your Strapi project. [Learn more](https://www.npmjs.com/package/@indoomni/strapi-plugin-kafkajs)
+Add the library to your Strapi project. [Learn more](https://www.npmjs.com/package/@indoomni/strapi-plugin-firebase-admin)
 
 ```
 
-yarn add @indoomni/strapi-plugin-kafkajs
+yarn add @indoomni/strapi-plugin-firebase-admin
 yarn install
 yarn build
 
@@ -35,26 +39,18 @@ module.exports = ({ env }) => ({
     keys: env.array('APP_KEYS'),
   },
   // ...
-  kafkajs: {
+  'firebase-admin': {
     enabled: true,
     config: {
-      publishers: [
-        {
-          enabled: true,
-          clientId: `${env('APP_NAME')}_${env('ENV')}_log_pub`,
-          topic: `Ngapi_${env('ENV')}_logs`,
-          brokers: ['kafka:9092'],
-        },
-      ],
-      subscribers: [
-        {
-          enabled: true,
-          clientId: `${env('APP_NAME')}_${env('ENV')}_log_sub`,
-          topic: `Ngapi_${env('ENV')}_logs`,
-          brokers: ['kafka:9092'],
-          handler: 'kafka-logger.js',
-        },
-      ],
+      configFile: '../service-account.json',
+      serviceId: `${env('APP_NAME')}_${env('ENV')}_fcm`,
+      services: ['notification'],
+      tags: [],
+      test: {
+        fcmToken: 'xyz123',
+        title: 'Hello!',
+        body: 'Hello world!',
+      },
     },
   },
   // ...
@@ -62,83 +58,33 @@ module.exports = ({ env }) => ({
 
 ```
 
-Notice the **publishers** attribute. Here, you can add multiple producers where each one will be identified by its **clientId**. When connection to each **broker(s)** is established, you will be able to publish messages/jobs into the said **topic**.
+Notice **config** sub-attribute in the the **'firebase-admin'** attribute. Don't forget to use the single-quotation marks.
 
-Now, notice the **subscribers** attribute. Here, you can add multiple consumers where each one will be identified also by its **clientId**. When connection to each **broker(s)** is established, the subscriber will merge into available consumer groups managed by the broker and its Zookeeper, and will subscribe (or "listen" if that's your thing) to the said **topic**. The library will automatically poll for new messages/jobs; any incoming message/job will be fed into an asynchronous "eachMessage" function in the Javascript file pointed by the **handler** attribute. We'll discuss this along.
+Now, notice the **configFile** attribute. Your service account JSON file should reside on the root of your project (add "../" since we use "src" for the base directory). The other attributes are currently ignored and supplied for future development. If you supply a **test** attribute, the library will try to send a message to the said token after initialized.
 
 <br/>
 
-### `How to publish messages or jobs?`
+### `How to send messages`
 
-Anywhere in your code (for example in a middleware to stream access logs to the some logger on the other side), write as in the following snippet. Refer to the **publisher** controller inside the library, and call **publish** function. Keep note of the set client ID and topic set up in the `Configuration` step.
+Anywhere in your code, write as in the following snippet. Refer to the **admin** controller inside the library, and call **send** function. Supply a client's FCM token, title, body and data if necessary.
+<br/>
+Note: _If_ you specify [data], it will be encrypted as Base64 string. At your client app's side, when you receive the notification, **decode** the data using some Base64 encryption, then use the data as needed.
 
 ```
 
-# src/middlewares/kafkaLogger.js
+# src/**/any.js
 # ------------------------------
 
 // ...
-setTimeout(async () => {
-  const log = {
-    uuid: ctx.uuid,
-    timestamp: ctx.timestamp,
-    timer: Math.ceil(Date.now() - start) + 'ms',
-    request,
-    response,
-    stack: ctx.stack,
-  };
-  const clientId = `${strapi.appName}_${strapi.appEnv}_log_pub`;
-  const topic = `Ngapi_${strapi.appEnv}_logs`;
-  const message = JSON.stringify(log);
+try {
   await strapi
-    .plugin('kafkajs')
-    .controller('publisher')
-    .publish(clientId, topic, message);
-}, 0);
+    .plugin('firebase-admin')
+    .controller('admin')
+    .send(token, title, body, data);
+} catch (err) {
+  strapi.log.debug('📺: ', err);
+}
 // ...
-
-```
-
-<br/>
-
-### `How to subscribe to messages or jobs?`
-
-Remember the **handler** attribute from the `Configuration` step? In the example configuration, it should point to your own implementation, named **.../src/handler.js**. If you put the JS file somewhere else, just modify the path. The path is relative to folder **src** in your code.
-
-```
-
-# src/handler.js
-# --------------
-
-'use strict';
-
-module.exports = {
-  eachMessage: async ({
-    topic,
-    partition,
-    offset,
-    message,
-  }) => {
-    const payload = message.value.toString();
-    strapi.log.info(
-      `I am sample handler file ${__filename}, edit me..`,
-    );
-    strapi.log.info(
-      `Received message from topic: ${topic} partition: ${partition} offset: ${offset}`,
-    );
-    try {
-      let object;
-      if ((object = JSON.parse(payload))) {
-        strapi.log.info('Do something...');
-        // Do something..
-        strapi.log.info('Done!');
-      }
-    } catch (err) {
-      strapi.log.info('Pass!');
-    }
-  },
-};
-
 
 ```
 
@@ -146,14 +92,14 @@ module.exports = {
 
 ## 📚 Learn more
 
+- [Firebase Admin Node.js SDK](https://www.npmjs.com/package/firebase-admin) - google-wombot's excellent Firebase Admin Node.ks SDK library page on npmjs.com.
 - [Resource center](https://strapi.io/resource-center) - Strapi resource center.
 - [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
 - [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Kafka Docker Hub page](https://hub.docker.com/r/confluentinc/cp-kafka/)
-- [Zookeeper Docker Hub page](https://hub.docker.com/_/zookeeper)
+- [Google Firebase product page](https://firebase.google.com/)
 
 <br/>
 
 ---
 
-<sub>Feel free to check out my [GitHub repository](https://github.com/indoomni/strapi-plugin-kafkajs). Your feedback and contributions are welcome!</sub>
+<sub>Feel free to check out my [GitHub repository](https://github.com/indoomni/strapi-plugin-firebase-admin). Your feedback and contributions are welcome!</sub>

@@ -1,10 +1,10 @@
 {
   "name": "@indoomni/strapi-plugin-firebase-admin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Wrapper for Firebase Admin Node.js SDK library to be used with Strapi apps.",
   "strapi": {
-    "name": "kafkajs",
-    "description": "Wrapper for Firebase Admin Node.js SDK library to be used with Strapi apps. Supply a valid Google Firebase credentials (JSON) file. As of time of writing, implemented functionality is push notification.",
+    "name": "firebase-admin",
+    "description": "Wrapper for google-wombot's [Firebase Admin Node.js SDK](https://www.npmjs.com/package/firebase-admin) library to be used with Strapi apps.",
     "kind": "plugin",
     "displayName": "Strapi Firebase Admin Node.js SDK library wrapper"
   },
