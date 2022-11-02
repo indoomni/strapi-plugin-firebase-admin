@@ -1,4 +1,4 @@
-console.log('Firebase admin routes..');
+// console.log('Firebase admin routes..');
 
 module.exports = [
   {

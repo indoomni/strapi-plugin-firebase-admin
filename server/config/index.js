@@ -40,7 +40,7 @@ module.exports = {
         )} configuration is valid!`,
       );
     } catch (err) {
-      strapi.log.error(
+      strapi.log.warn(
         `Firebase admin got disabled or configuration is invalid!`,
       );
     }
