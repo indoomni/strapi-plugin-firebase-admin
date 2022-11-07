@@ -94,35 +94,31 @@ module.exports = ({ strapi }) => ({
   deinit: async () => {},
   send: async (token, title, body, data = undefined) => {
     console.log('--send', token);
-    if (!token) return;
 
-    try {
-      const message = {
-        token,
-        notification: {
-          title,
-          body,
-        },
-        data,
-      };
-      await strapi.firebase.admin
-        .messaging()
-        .send(message)
-        .then(res => {
-          console.log(
-            `Sent push notification:`,
-            strapi.inspect(res),
-          );
-        })
-        .catch(err => {
-          console.log(
-            `Error sending push notification: ${err.codePrefix}`,
-            strapi.inspect(err.errorInfo),
-          );
-        });
-    } catch (err) {
-      strapi.log.debug('📺: ', err);
-    }
+    const message = {
+      token,
+      notification: {
+        title,
+        body,
+      },
+      data,
+    };
+    await strapi.firebase.admin
+      .messaging()
+      .send(message)
+      .then(res => {
+        console.log(
+          `Sent push notification:`,
+          strapi.inspect(res),
+        );
+      })
+      .catch(err => {
+        console.log(
+          `Error sending push notification: ${err.codePrefix}`,
+          strapi.inspect(err.errorInfo),
+        );
+        throw err;
+      });
 
     return 'ok';
   },
