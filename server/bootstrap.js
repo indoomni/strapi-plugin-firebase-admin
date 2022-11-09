@@ -21,7 +21,6 @@ module.exports = async ({ strapi }) => {
       )}`,
     );
   } catch (err) {
-    strapi.log.error(err);
     strapi.log.info('Firebase admin not bootstrapped!');
   }
 };
